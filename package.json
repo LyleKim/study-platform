@@ -1,0 +1,28 @@
+{
+    "name": "software_contest",
+    "private": true,
+    "type": "module",
+    "version": "",
+    "workspaces": [
+      "apps/*"
+    ],
+    "scripts": {
+      "dev": "bun --filter '*' dev",
+      "dev:backend": "bun --filter backend dev",
+      "dev:frontend": "bun --filter frontend dev"
+    },
+
+    "devDependencies": {
+        "@types/bun": "latest",
+        "sass": "^1.86.0"
+      },
+      "peerDependencies": {
+        "typescript": "^5"
+      },
+      "dependencies": {
+        "zod": "^3.24.2"
+      },
+      
+      "packageManager": "bun@1.1.7"
+  }
+  
