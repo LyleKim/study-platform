@@ -1,5 +1,4 @@
-import { Hono } from 'hono';
-declare const app: Hono<import("hono/types").BlankEnv, import("hono/types").BlankSchema, "/">;
+declare const app: import("hono/hono-base").HonoBase<{}, import("hono/types").BlankSchema, "/">;
 declare const routes: import("hono/hono-base").HonoBase<{}, import("hono/types").BlankSchema | import("hono/types").MergeSchemaPath<{
     "/": {
         $get: {
@@ -9,7 +8,20 @@ declare const routes: import("hono/hono-base").HonoBase<{}, import("hono/types")
             status: import("hono/utils/http-status").ContentfulStatusCode;
         };
     };
-}, "/testRoute">, "/">;
+}, "/testRoute"> | import("hono/types").MergeSchemaPath<{
+    "/": {
+        $post: {
+            input: {
+                json: {
+                    input: number;
+                };
+            };
+            output: string;
+            outputFormat: "json";
+            status: import("hono/utils/http-status").ContentfulStatusCode;
+        };
+    };
+}, "/postTest">, "/">;
 export type AppType = typeof routes;
 export default app;
 //# sourceMappingURL=index.d.ts.map

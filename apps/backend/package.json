@@ -1,12 +1,12 @@
 {
   "name": "@software_contest/backend",
   "type": "module",
-  "private":true,
+  "private": true,
   "main": "src/index.ts",
-  "exports":{
-    "./honoClient":{
-      "import":{
-        "default":"./dist/honoClient.js",
+  "exports": {
+    "./honoClient": {
+      "import": {
+        "default": "./dist/honoClient.js",
         "types": "./dist/honoClient.d.ts"
       }
     }
@@ -16,6 +16,7 @@
     "build": "tsc -p tsconfig.build.json"
   },
   "dependencies": {
+    "@hono/zod-validator": "^0.7.0",
     "hono": "4.8.0"
   },
   "devDependencies": {

@@ -8,6 +8,19 @@ declare const client: {
             status: import("hono/utils/http-status").ContentfulStatusCode;
         };
     }>;
+} & {
+    postTest: import("hono/client").ClientRequest<{
+        $post: {
+            input: {
+                json: {
+                    input: number;
+                };
+            };
+            output: string;
+            outputFormat: "json";
+            status: import("hono/utils/http-status").ContentfulStatusCode;
+        };
+    }>;
 };
 export type Client = typeof client;
 export declare const hcWithType: (...args: Parameters<typeof hc>) => Client;

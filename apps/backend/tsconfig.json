@@ -26,9 +26,6 @@
     "noUnusedParameters": false,
     "noPropertyAccessFromIndexSignature": false,
 
-    // "composite": true,
-		// "declaration":true,
-		// "declarationMap": true,
 
     "paths": {
       "~/*": ["./src/*"]

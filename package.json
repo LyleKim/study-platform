@@ -4,25 +4,23 @@
     "type": "module",
     "version": "",
     "workspaces": [
-      "apps/*"
+        "apps/*"
     ],
     "scripts": {
-      "dev": "bun --filter '*' dev",
-      "dev:backend": "bun --filter backend dev",
-      "dev:frontend": "bun --filter frontend dev"
+        "dev": "bun --filter '*' dev",
+        "dev:backend": "bun --filter backend dev",
+        "dev:frontend": "bun --filter frontend dev"
     },
-
     "devDependencies": {
         "@types/bun": "latest",
         "sass": "^1.86.0"
-      },
-      "peerDependencies": {
+    },
+    "peerDependencies": {
         "typescript": "^5"
-      },
-      "dependencies": {
+    },
+    "dependencies": {
+        "@hono/zod-validator": "^0.7.0",
         "zod": "^3.24.2"
-      },
-      
-      "packageManager": "bun@1.1.7"
-  }
-  
+    },
+    "packageManager": "bun@1.1.7"
+}
