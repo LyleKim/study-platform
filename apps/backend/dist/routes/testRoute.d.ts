@@ -2,7 +2,7 @@ declare const app: import("hono/hono-base").HonoBase<import("hono/types").BlankE
     "/": {
         $get: {
             input: {};
-            output: 10000;
+            output: string;
             outputFormat: "json";
             status: import("hono/utils/http-status").ContentfulStatusCode;
         };

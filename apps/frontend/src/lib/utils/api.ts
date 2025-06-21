@@ -2,6 +2,3 @@
 import { hcWithType } from '@software_contest/backend/honoClient'
 
 export const client = hcWithType(import.meta.env.VITE_Backend_URL);
-
-
-console.log(client);

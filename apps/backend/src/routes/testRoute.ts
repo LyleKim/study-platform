@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-const re = 10000;
+const re:string = '$get을 호출한 결과입니다.'
 
 
 
