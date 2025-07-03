@@ -1,4 +1,5 @@
 <script lang="ts">
+
     // /lecture/+page.svelte파일
     import { client } from "$lib/utils/api";
     import { json } from "@sveltejs/kit";
