@@ -47,6 +47,19 @@ declare const app: import("hono/hono-base").HonoBase<Env, {
             status: import("hono/utils/http-status").ContentfulStatusCode;
         };
     };
+} & {
+    "/getLectureId": {
+        $post: {
+            input: {
+                json: {
+                    title: string;
+                };
+            };
+            output: number;
+            outputFormat: "json";
+            status: import("hono/utils/http-status").ContentfulStatusCode;
+        };
+    };
 }, "/">;
 export default app;
 //# sourceMappingURL=courseInfo.d.ts.map

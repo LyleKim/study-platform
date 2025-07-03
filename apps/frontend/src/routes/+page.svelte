@@ -22,7 +22,7 @@
     videoUrl:''
   };
 
-  let newlecture: lectureData ={
+  let newlecture: lectureData = {
     courseId: corId,
     title:'',
     videoUrl:''
@@ -40,8 +40,10 @@
     lectureTitle = await res3.json();
   });
 
-  function whereToGo(title: string) {
-    goto(`/lecture/${title}/`);
+  async function whereToGo(title: string) {
+    const res = await client.courseInfo.getLectureId.$post({json: { title }});
+    const id = await res.json();
+    goto(`/lecture/${id}/`);
   }
 
   function pressAddTdlBut(val:boolean) {

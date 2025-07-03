@@ -65,5 +65,15 @@ const app = new Hono()
         memo: ""
     });
     return c.json("성공적으로 저장했습니다.");
+})
+    .post('/getLectureId', zValidator('json', z.object({
+    title: z.string()
+})), async (c) => {
+    const data = c.req.valid('json');
+    const titleList = await db.select({ id: lectureTable.lectureId })
+        .from(lectureTable)
+        .where(eq(lectureTable.title, data.title));
+    let lectureTitle = titleList[0]?.id ?? -1;
+    return c.json(lectureTitle);
 });
 export default app;

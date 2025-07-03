@@ -1,9 +1,11 @@
 import { Hono } from 'hono';
 import { cors } from 'hono/cors';
-import userInfo from './routes/userInfo';
 import courseInfo from './routes/courseInfo';
+import lectureInfo from './routes/lectureInfo';
+import lectureMemo from './routes/lectureMemo';
 const app = new Hono().use(cors());
 const routes = app
-    .route('/userInfo', userInfo)
-    .route('/courseInfo', courseInfo);
+    .route('/courseInfo', courseInfo)
+    .route('/lectureInfo', lectureInfo)
+    .route('/lectureMemo', lectureMemo);
 export default app;
