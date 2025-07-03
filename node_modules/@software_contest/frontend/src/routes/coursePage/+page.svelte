@@ -2,7 +2,7 @@
 
 
 <main>
-    <p>'/lecture' 페이지</p>
+    <p>'/coursePage' 페이지</p>
 </main>
 
 <style></style>

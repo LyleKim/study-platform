@@ -44,6 +44,14 @@
     const res1 = await client.postTest.$post({json:{ input }});
     data1 = await res1.json();    
   });
+
+  import { goto } from "$app/navigation";
+
+  const inputCourseId: number = 1;
+
+   function whereToGo() {
+    goto(`/lecture/${inputCourseId}/`)
+  }
 </script>
 
 
@@ -94,6 +102,6 @@
 
 <nav>
 	<a href="/">home</a>
-	<a href="/lecture?id=2">lecture</a>
+  <a href="/main">main</a>
 </nav>
 

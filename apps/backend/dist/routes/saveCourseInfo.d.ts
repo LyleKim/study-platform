@@ -4,15 +4,14 @@ declare const app: import("hono/hono-base").HonoBase<Env, {
         $post: {
             input: {
                 json: {
-                    inputLectureId: number;
+                    courseInfo: {
+                        title: string;
+                        goalDate: string;
+                    };
                 };
             };
             output: {
-                courseTitle: string | null;
-                lectureTitle: string | null;
-                lectureId: number;
-                url: string | null;
-                memo: string | null;
+                courseId: number;
             }[];
             outputFormat: "json";
             status: import("hono/utils/http-status").ContentfulStatusCode;
@@ -20,4 +19,4 @@ declare const app: import("hono/hono-base").HonoBase<Env, {
     };
 }, "/">;
 export default app;
-//# sourceMappingURL=lectureInfo.d.ts.map
+//# sourceMappingURL=saveCourseInfo.d.ts.map

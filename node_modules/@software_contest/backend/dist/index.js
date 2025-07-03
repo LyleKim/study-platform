@@ -5,11 +5,13 @@ import postTest from './routes/postTest';
 import userInfo from './routes/userInfo';
 import lectureInfo from './routes/lectureInfo';
 import lectureMemo from './routes/lectureMemo';
+import saveCourseInfo from './routes/saveCourseInfo';
 const app = new Hono().use(cors());
 const routes = app
     .route('/testRoute', testRoute)
     .route('/postTest', postTest)
     .route('/userInfo', userInfo)
     .route('/lectureInfo', lectureInfo)
-    .route('/lectureMemo', lectureMemo);
+    .route('/lectureMemo', lectureMemo)
+    .route('/saveCourseInfo', saveCourseInfo);
 export default app;
