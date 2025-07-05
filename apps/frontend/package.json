@@ -12,8 +12,12 @@
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch"
 	},
 	"dependencies": {
+		"@cartamd/plugin-math": "^4.3.1",
+		"carta-md": "^4.11.1",
 		"clsx": "2.1.1",
-		"hono": "4.8.0"
+		"hono": "4.8.0",
+		"isomorphic-dompurify": "^2.25.0",
+		"katex": "^0.16.22"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^6.0.0",

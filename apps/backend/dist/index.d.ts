@@ -60,8 +60,8 @@ declare const routes: import("hono/hono-base").HonoBase<{}, import("hono/types")
             status: import("hono/utils/http-status").ContentfulStatusCode;
         };
     };
-}, "/courseInfo"> | import("hono/types").MergeSchemaPath<{
-    "/": {
+}, "/course"> | import("hono/types").MergeSchemaPath<{
+    "/lectureInfo": {
         $post: {
             input: {
                 json: {
@@ -74,26 +74,30 @@ declare const routes: import("hono/hono-base").HonoBase<{}, import("hono/types")
                 lectureId: number;
                 memo: string;
                 url: string;
+                isCompleted: boolean;
             };
             outputFormat: "json";
             status: import("hono/utils/http-status").ContentfulStatusCode;
         };
     };
-}, "/lectureInfo"> | import("hono/types").MergeSchemaPath<{
-    "/": {
+} & {
+    "/lectureMemo": {
         $post: {
             input: {
                 json: {
-                    lectureId: number;
-                    memo: string;
+                    lectureUpdate: {
+                        lectureId: number;
+                        isCompleted: boolean;
+                        memo: string;
+                    };
                 };
             };
-            output: string;
+            output: "successfully updated!!";
             outputFormat: "json";
             status: import("hono/utils/http-status").ContentfulStatusCode;
         };
     };
-}, "/lectureMemo">, "/">;
+}, "/lecture">, "/">;
 export type AppType = typeof routes;
 export default app;
 //# sourceMappingURL=index.d.ts.map

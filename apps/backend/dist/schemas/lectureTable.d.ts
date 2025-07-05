@@ -91,9 +91,9 @@ export declare const lectureTable: import("drizzle-orm/mysql-core").MySqlTableWi
             name: "memo";
             tableName: "lectureTable";
             dataType: "string";
-            columnType: "MySqlVarChar";
+            columnType: "MySqlText";
             data: string;
-            driverParam: string | number;
+            driverParam: string;
             notNull: false;
             hasDefault: false;
             isPrimaryKey: false;

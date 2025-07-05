@@ -4,40 +4,71 @@
   import { onMount } from "svelte";
   import { page } from "$app/state";
   import { getYoutubeId } from "$lib/utils/youtube";
-
-  let fullUrl: string = $state("");
-  let lectureId: number = $state(-1);
-  let courseTitle: string = $state("");
-  let lectureTitle: string = $state("");
-  let memo: string = $state("");
-
-  const VIDEO_CONTAINER_ID = "youtube-player";
-  let player: InstanceType<Window["YT"]["Player"]>;
+  import { Carta, MarkdownEditor } from "carta-md";
+  import 'carta-md/default.css';
+  import createDOMPurify from 'isomorphic-dompurify'
+  import 'katex/dist/katex.css';
+  import { math } from "@cartamd/plugin-math";
+  import { goto } from "$app/navigation";
 
   const inputLectureId = $derived(page.params["id"]);
 
-  //url에서 영상id 추출
-  function extractId(url: string | null) {
-    const regExp = /(?:youtu\.be\/|youtube\.com\/)([^#&?]{11})/;
-    if (url !== null) {
-      const match = url.match(regExp);
-      return match && match[1] ? match[1] : null;
-    }
-  }
+  let fullUrl: string = $state("");
+  let value:string = $state("");
 
-  //강의 데이터 불러오기 (영상, 메모)
+type Lecture = {
+    courseTitle: string;
+    lectureTitle: string;
+    lectureId: number;
+    memo: string;
+    url: string;
+    isCompleted: boolean;
+};
+let lectureStatus: Lecture = $state({  //초기 필요한 데이터 가져오기
+    courseTitle: "",
+    lectureTitle: "",
+    lectureId: 0,
+    memo: "",
+    url: "",
+    isCompleted: false
+});
+
+type LectureUpdate = {
+    lectureId: number;
+    memo: string;
+    isCompleted: boolean;
+};
+let lectureUpdate:LectureUpdate;
+
+    
+  const VIDEO_CONTAINER_ID = "youtube-player";
+  let player: InstanceType<Window["YT"]["Player"]>;
+
+  //TODO:html sanitizer import and add Carta plugin
+  const DOMPurify = createDOMPurify(window);
+  const carta = new Carta({
+    sanitizer:(html) => DOMPurify.sanitize(html),
+    extensions: [math()]
+  });
+
+  //TOTO:get lectureTable values
   async function getCourseInfo(){
-    const res = await client.lectureInfo.$post({ json: { inputLectureId } });
-    const result = await res.json();
+    const res = await client.lecture.lectureInfo.$post({json:{ inputLectureId }});
+    lectureStatus = await res.json();
+    fullUrl = lectureStatus.url;
+    value = lectureStatus.memo
 
-    lectureTitle = result.lectureTitle;
-    courseTitle = result.courseTitle;
-    lectureId = result.lectureId;
-    fullUrl = result.url;
-    console.log(getYoutubeId(fullUrl));
+    lectureUpdate = { //학습 완료, 저장 후 update용
+        lectureId: lectureStatus.lectureId,
+        memo: lectureStatus.memo,
+        isCompleted: lectureStatus.isCompleted
+    };
+
+    console.log(getYoutubeId(fullUrl)); //console.log
   };
 
-  //유튜브 영상 가져오기
+
+  //TODO:Get youtube API and play
   onMount(async () => {
     await getCourseInfo();
 
@@ -57,70 +88,154 @@
       }
   });
 
-  //메모 저장
-  async function saveMemo() {
-    const tmp = document.querySelector<HTMLElement>("#memo-pad-content");
-    memo = tmp?.innerText ?? "";
-    if (lectureId !== null) {
-      const res = await client.lectureMemo.$post({ json: { lectureId, memo } });
-    }
-    if (tmp !== null) tmp.innerText = memo;
-  }
+
+async function updateChanges(Memo:string, status:boolean){
+    lectureUpdate.memo = Memo;
+    lectureUpdate.isCompleted = status;
+    await client.lecture.lectureMemo.$post({json : { lectureUpdate }});
+    goto('/');
+}
+
+async function whereToGo() {
+    goto('/');
+}
+
 </script>
 
 <svelte:head>
   <script src="https://www.youtube.com/iframe_api"></script>
 </svelte:head>
 
+
+
+
 <main>
-  <nav>
-    <a href="/">home</a>
-    <a href="/lecture">lecture</a>
-  </nav>
+    <div class="frame">
+        <main class="main-content">
+            <header class="header">
+                <nav class="navigation">
+                    <button class="buttonstyle" onclick={() => whereToGo()}>{lectureStatus.courseTitle} - {lectureStatus.lectureTitle}</button>
+                    <button class="buttonstyle" onclick={() => updateChanges(value, false)}>저장하기</button>
+                </nav>
+            </header>
+            
+            <section class="content-area">
+                <div class="video-panel">
+                    <div id={VIDEO_CONTAINER_ID}>
+                        <!--이 영역은 유튜브가 출력됨니다.-->
+                    </div>
+                </div>
 
-  <h1>과목 이름: {courseTitle}</h1>
-  <h2>강의 제목: {lectureTitle}</h2>
-
-  <!-- <iframe width="560" height="315" src="https://www.youtube.com/embed/{videoId}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>     -->
-
-  <div id={VIDEO_CONTAINER_ID}>
-    <!--이 영역은 유튜브가 출력됨니다.-->
-  </div>
-
-  <br /><br />
-  <div id="memo-pad">
-    <div id="memo-pad-header">
-      <button id="save-memo-button" onclick={saveMemo}>메모 저장</button>
+                <div class="memo-panel">
+                    <MarkdownEditor bind:value {carta} />
+                </div>
+            </section>
+            
+            <footer class="footer">
+                <div class="completion-part">
+                    <button class="completion-button" onclick={() => updateChanges(value, true)}>학습 완료</button>
+                </div>
+            </footer>
+        </main>
     </div>
-
-    <div id="memo-pad-content" contenteditable="true">
-      {@html memo.replace(/\n/g, "<br>")}
-    </div>
-  </div>
 </main>
 
 <style>
-  #memo-pad-header {
-    background-color: rgb(214, 176, 105);
-    border: none;
-    outline: none;
-    width: 560px;
-    height: 40px;
-    align-self: center;
-  }
+:global(.carta-font-code) {
+    font-family: 'Fira Mono', monospace;
+    font-size: 1.1rem;
+    line-height: 1.1rem;
+    letter-spacing: normal;
+} 
 
-  #memo-pad-content {
-    background-color: rgb(177, 145, 86);
-    border: none;
-    outline: none;
-    width: 560px;
-    height: 495px;
-    align-self: center;
-    max-height: 315px;
-    overflow: auto;
-  }
+.frame {
+    background-color:white;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+}
 
-  #save-memo-button {
-    margin: 8px;
-  }
+.main-content{
+    background-color: white;
+    width: 100%;
+    max-width: 1440px;
+    min-height: 1024px;
+    position:relative
+}
+
+.header{
+    height: 60px;
+    width: 100%;
+    position: relative;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+    background-color: #d9d9d9;
+}
+
+.navigation{
+    display: flex;
+    justify-content: space-between;
+    align-items:center;
+    height: 100%;
+    padding: 0 34px;
+}
+
+.buttonstyle{
+    width: 600px;
+    height: 59px;
+    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    font-size:30px;
+    line-height: 45px;
+    font-family:"Inter-Reqular",Arial, Helvetica, sans-serif;
+    font-weight: 400;
+    color:#000000;
+    text-align: center;
+    background: none;
+    border:none;
+    cursor:pointer;
+}
+
+.content-area{
+    display: flex;
+    justify-content: space-between;
+    padding:79px 20px 0;
+}
+
+.video-panel{
+    width: 640px;
+    height: 543px;
+    margin-top: 100px;
+}
+
+.memo-panel{
+    width: 736px;
+    height: 761px;
+}
+
+.footer{
+    height: 121px;
+    background-color: white;
+    position: absolute;
+    bottom:0;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding-right: 62px;
+}
+
+.completion-button{
+    width: 184px;
+    height: 73px;
+    background-color: #d9d9d9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 27;
+    line-height: 40.5px;
+    font-family: "Inter-Regular",Arial, Helvetica, sans-serif;
+    font-weight: 400;
+    color:#000000;
+    text-align: center;
+}
 </style>

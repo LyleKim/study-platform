@@ -30,18 +30,18 @@
 
 
   onMount(async () => {
-    const res1 = await client.courseInfo.title.$post({ json: { corId } });
+    const res1 = await client.course.title.$post({ json: { corId } });
     title = (await res1.json()) ?? "";
 
-    const res2 = await client.courseInfo.progRate.$get();
+    const res2 = await client.course.progRate.$get();
     progressValue = await res2.json();
 
-    const res3 = await client.courseInfo.tdl.$get();
+    const res3 = await client.course.tdl.$get();
     lectureTitle = await res3.json();
   });
 
   async function whereToGo(title: string) {
-    const res = await client.courseInfo.getLectureId.$post({json: { title }});
+    const res = await client.course.getLectureId.$post({json: { title }});
     const id = await res.json();
     goto(`/lecture/${id}/`);
   }
@@ -52,7 +52,7 @@
 
   async function storeNewTdl(){
     lecture = {...newlecture};
-    const res = await client.courseInfo.Addlecture.$post({json:{ lecture }});
+    const res = await client.course.Addlecture.$post({json:{ lecture }});
     pressAddTdlBut(false);
     window.location.href = window.location.pathname;
   }

@@ -1,6 +1,6 @@
 import { hc } from 'hono/client';
 declare const client: {
-    courseInfo: {
+    course: {
         title: import("hono/client").ClientRequest<{
             $post: {
                 input: {
@@ -15,7 +15,7 @@ declare const client: {
         }>;
     };
 } & {
-    courseInfo: {
+    course: {
         progRate: import("hono/client").ClientRequest<{
             $get: {
                 input: {};
@@ -26,7 +26,7 @@ declare const client: {
         }>;
     };
 } & {
-    courseInfo: {
+    course: {
         tdl: import("hono/client").ClientRequest<{
             $get: {
                 input: {};
@@ -37,7 +37,7 @@ declare const client: {
         }>;
     };
 } & {
-    courseInfo: {
+    course: {
         Addlecture: import("hono/client").ClientRequest<{
             $post: {
                 input: {
@@ -56,7 +56,7 @@ declare const client: {
         }>;
     };
 } & {
-    courseInfo: {
+    course: {
         getLectureId: import("hono/client").ClientRequest<{
             $post: {
                 input: {
@@ -71,38 +71,46 @@ declare const client: {
         }>;
     };
 } & {
-    lectureInfo: import("hono/client").ClientRequest<{
-        $post: {
-            input: {
-                json: {
-                    inputLectureId: string;
+    lecture: {
+        lectureInfo: import("hono/client").ClientRequest<{
+            $post: {
+                input: {
+                    json: {
+                        inputLectureId: string;
+                    };
                 };
-            };
-            output: {
-                courseTitle: string;
-                lectureTitle: string;
-                lectureId: number;
-                memo: string;
-                url: string;
-            };
-            outputFormat: "json";
-            status: import("hono/utils/http-status").ContentfulStatusCode;
-        };
-    }>;
-} & {
-    lectureMemo: import("hono/client").ClientRequest<{
-        $post: {
-            input: {
-                json: {
+                output: {
+                    courseTitle: string;
+                    lectureTitle: string;
                     lectureId: number;
                     memo: string;
+                    url: string;
+                    isCompleted: boolean;
                 };
+                outputFormat: "json";
+                status: import("hono/utils/http-status").ContentfulStatusCode;
             };
-            output: string;
-            outputFormat: "json";
-            status: import("hono/utils/http-status").ContentfulStatusCode;
-        };
-    }>;
+        }>;
+    };
+} & {
+    lecture: {
+        lectureMemo: import("hono/client").ClientRequest<{
+            $post: {
+                input: {
+                    json: {
+                        lectureUpdate: {
+                            lectureId: number;
+                            isCompleted: boolean;
+                            memo: string;
+                        };
+                    };
+                };
+                output: "successfully updated!!";
+                outputFormat: "json";
+                status: import("hono/utils/http-status").ContentfulStatusCode;
+            };
+        }>;
+    };
 };
 export type Client = typeof client;
 export declare const hcWithType: (...args: Parameters<typeof hc>) => Client;
