@@ -4,7 +4,7 @@ declare const routes: import("hono/hono-base").HonoBase<{}, import("hono/types")
         $post: {
             input: {
                 json: {
-                    corId: number;
+                    corId: string;
                 };
             };
             output: string;
@@ -14,8 +14,12 @@ declare const routes: import("hono/hono-base").HonoBase<{}, import("hono/types")
     };
 } & {
     "/progRate": {
-        $get: {
-            input: {};
+        $post: {
+            input: {
+                json: {
+                    corId: string;
+                };
+            };
             output: number[];
             outputFormat: "json";
             status: import("hono/utils/http-status").ContentfulStatusCode;
@@ -23,8 +27,12 @@ declare const routes: import("hono/hono-base").HonoBase<{}, import("hono/types")
     };
 } & {
     "/tdl": {
-        $get: {
-            input: {};
+        $post: {
+            input: {
+                json: {
+                    corId: string;
+                };
+            };
             output: string[];
             outputFormat: "json";
             status: import("hono/utils/http-status").ContentfulStatusCode;
@@ -36,7 +44,7 @@ declare const routes: import("hono/hono-base").HonoBase<{}, import("hono/types")
             input: {
                 json: {
                     lecture: {
-                        courseId: number;
+                        courseId: string;
                         title: string;
                         videoUrl: string;
                     };
@@ -97,7 +105,25 @@ declare const routes: import("hono/hono-base").HonoBase<{}, import("hono/types")
             status: import("hono/utils/http-status").ContentfulStatusCode;
         };
     };
-}, "/lecture">, "/">;
+}, "/lecture"> | import("hono/types").MergeSchemaPath<{
+    "/": {
+        $post: {
+            input: {
+                json: {
+                    courseInfo: {
+                        title: string;
+                        goalDate: string;
+                    };
+                };
+            };
+            output: {
+                courseId: number;
+            }[];
+            outputFormat: "json";
+            status: import("hono/utils/http-status").ContentfulStatusCode;
+        };
+    };
+}, "/createCourse">, "/">;
 export type AppType = typeof routes;
 export default app;
 //# sourceMappingURL=index.d.ts.map

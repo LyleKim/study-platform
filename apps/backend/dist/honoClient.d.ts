@@ -5,7 +5,7 @@ declare const client: {
             $post: {
                 input: {
                     json: {
-                        corId: number;
+                        corId: string;
                     };
                 };
                 output: string;
@@ -17,8 +17,12 @@ declare const client: {
 } & {
     course: {
         progRate: import("hono/client").ClientRequest<{
-            $get: {
-                input: {};
+            $post: {
+                input: {
+                    json: {
+                        corId: string;
+                    };
+                };
                 output: number[];
                 outputFormat: "json";
                 status: import("hono/utils/http-status").ContentfulStatusCode;
@@ -28,8 +32,12 @@ declare const client: {
 } & {
     course: {
         tdl: import("hono/client").ClientRequest<{
-            $get: {
-                input: {};
+            $post: {
+                input: {
+                    json: {
+                        corId: string;
+                    };
+                };
                 output: string[];
                 outputFormat: "json";
                 status: import("hono/utils/http-status").ContentfulStatusCode;
@@ -43,7 +51,7 @@ declare const client: {
                 input: {
                     json: {
                         lecture: {
-                            courseId: number;
+                            courseId: string;
                             title: string;
                             videoUrl: string;
                         };
@@ -111,6 +119,24 @@ declare const client: {
             };
         }>;
     };
+} & {
+    createCourse: import("hono/client").ClientRequest<{
+        $post: {
+            input: {
+                json: {
+                    courseInfo: {
+                        title: string;
+                        goalDate: string;
+                    };
+                };
+            };
+            output: {
+                courseId: number;
+            }[];
+            outputFormat: "json";
+            status: import("hono/utils/http-status").ContentfulStatusCode;
+        };
+    }>;
 };
 export type Client = typeof client;
 export declare const hcWithType: (...args: Parameters<typeof hc>) => Client;

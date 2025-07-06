@@ -3,7 +3,7 @@ import { z } from "zod";
 import { zValidator } from "~/utils/zValidator-wrapper";
 import { number, string } from "zod/v4";
 import { db } from "~/utils/db";
-import { usersTable } from "~/schemas/usersTable";
+import { usersTable } from "~/schemas/lectureStatus";
 //객체를 넘겨서 받고 싶다면
 const personSchema = z.object({
     id: z.number(),

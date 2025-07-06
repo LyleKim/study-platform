@@ -20,7 +20,7 @@ export declare const lectureTable: import("drizzle-orm/mysql-core").MySqlTableWi
             generated: undefined;
         }, {}, {}>;
         courseId: import("drizzle-orm/mysql-core").MySqlColumn<{
-            name: "couseId";
+            name: "courseId";
             tableName: "lectureTable";
             dataType: "number";
             columnType: "MySqlInt";

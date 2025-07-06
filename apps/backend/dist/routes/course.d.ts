@@ -4,7 +4,7 @@ declare const app: import("hono/hono-base").HonoBase<Env, {
         $post: {
             input: {
                 json: {
-                    corId: number;
+                    corId: string;
                 };
             };
             output: string;
@@ -14,8 +14,12 @@ declare const app: import("hono/hono-base").HonoBase<Env, {
     };
 } & {
     "/progRate": {
-        $get: {
-            input: {};
+        $post: {
+            input: {
+                json: {
+                    corId: string;
+                };
+            };
             output: number[];
             outputFormat: "json";
             status: import("hono/utils/http-status").ContentfulStatusCode;
@@ -23,8 +27,12 @@ declare const app: import("hono/hono-base").HonoBase<Env, {
     };
 } & {
     "/tdl": {
-        $get: {
-            input: {};
+        $post: {
+            input: {
+                json: {
+                    corId: string;
+                };
+            };
             output: string[];
             outputFormat: "json";
             status: import("hono/utils/http-status").ContentfulStatusCode;
@@ -36,7 +44,7 @@ declare const app: import("hono/hono-base").HonoBase<Env, {
             input: {
                 json: {
                     lecture: {
-                        courseId: number;
+                        courseId: string;
                         title: string;
                         videoUrl: string;
                     };

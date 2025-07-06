@@ -4,15 +4,18 @@ import { zValidator } from "~/utils/zValidator-wrapper";
 import type { Env } from '~/types/Env';
 import { db } from "~/utils/db";
 import { courseTable } from "~/schemas/courseTable";
-import { count, eq } from "drizzle-orm";
+import { and, count, eq, ne } from "drizzle-orm";
 import { lectureTable } from "~/schemas/lectureTable";
 
 
 let courseTitle:string;
 let total:number;
 let completedCount:number;
+let courseID:number;
+let lectureID:number;
+
 const lectureSchema = z.object({ 
-    courseId: z.number(),
+    courseId: z.string(),
     title: z.string(),
     videoUrl: z.string(),
   });
@@ -24,16 +27,17 @@ const app = new Hono<Env>()
         '/title',
         zValidator('json', 
             z.object({ 
-              corId: z.number()
+              corId: z.string()
             })
         ),
         async (c) => {
             const data = c.req.valid('json');
+            courseID = Number(data.corId);
             //courseTable에서 title 가져오기
             const result = await db.select({
                 courseTitle: courseTable.title
             }).from(courseTable)
-            .where(eq(courseTable.courseId, data.corId))
+            .where(eq(courseTable.courseId, courseID))
 
             courseTitle = result[0]?.courseTitle??""
             return c.json(courseTitle);
@@ -41,20 +45,26 @@ const app = new Hono<Env>()
     )
 
     //TODO: get data for calculate progress bar
-    .get(
+    .post(
         '/progRate',
+        zValidator('json', 
+            z.object({ 
+              corId: z.string()
+            })
+        ),
         async(c)=>{
+            const data = c.req.valid('json');
+            courseID = Number(data.corId);
             //courseId가 같은 것들 중에서 강의 목록의 총 개수
             const max = await db.select({total: count()})
-            .from(courseTable)
-            .innerJoin(lectureTable,eq(courseTable.courseId, lectureTable.courseId))
+            .from(lectureTable)
+            .where(and(eq(lectureTable.courseId, courseID), ne(lectureTable.title, "")));
             
-            //courseId가 같은 것들 중에서, 그 중에서 강의 목록이 학습 완료인 것들의 개수
+            //학습 완료한 lectrue의 수
             const value = await db.select({completedCount: count()})
-            .from(courseTable)
-            .innerJoin(lectureTable,eq(courseTable.courseId, lectureTable.courseId))
-            .where(eq(lectureTable.isCompleted, true))
-            
+            .from(lectureTable)
+            .where(and(eq(lectureTable.isCompleted,true), eq(lectureTable.courseId, courseID), ne(lectureTable.title, "")));
+
             total = max[0]?.total??0;
             completedCount = value[0]?.completedCount??0;
 
@@ -65,13 +75,20 @@ const app = new Hono<Env>()
     )
 
     //TOTO: get a lecture titleList that is a part of course
-    .get(
+    .post(
         '/tdl',
+        zValidator('json', 
+            z.object({ 
+              corId: z.string()
+            })
+        ),
         async (c) => {
+            const data = c.req.valid('json');
+            courseID = Number(data.corId);
             //과목에 맞는 강좌 목록 가져오기
-            const titleList = await db.select({title: lectureTable.title})
-            .from(courseTable)
-            .innerJoin(lectureTable,eq(courseTable.courseId, lectureTable.courseId))
+            const titleList = await db.select({title : lectureTable.title})
+            .from(lectureTable)
+            .where(and(eq(lectureTable.courseId, courseID), ne(lectureTable.title, "")));
 
             let result:string[] = titleList.map(item => item.title??"");
 
@@ -88,13 +105,15 @@ const app = new Hono<Env>()
         ),
         async(c) =>{
             const data = c.req.valid('json');
+            courseID = Number(data.lecture.courseId);
             await db.insert(lectureTable).values({
-                courseId: data.lecture.courseId,
+                courseId: courseID,
                 title: data.lecture.title,
                 isCompleted: false,
                 videoUrl: data.lecture.videoUrl,
-                memo:""
-            })
+                memo: ""
+            });
+
             return c.json("성공적으로 저장했습니다.");
         }
     )

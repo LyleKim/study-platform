@@ -2,9 +2,9 @@ import { Hono } from "hono";
 import { z } from "zod";
 import { zValidator } from "~/utils/zValidator-wrapper";
 import { courseTable } from "~/schemas/courseTable";
-import { lectureTable } from "~/schemas/lectureTable";
 import { db } from "~/utils/db";
 import { eq, and } from "drizzle-orm";
+import { lectureTable } from "~/schemas/lectureTable";
 let lectureId;
 const lectureSchema = z.object({
     lectureId: z.number(),

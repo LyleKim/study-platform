@@ -3,9 +3,9 @@ import type { Env } from '~/types/Env';
 import { z } from "zod";
 import { zValidator } from "~/utils/zValidator-wrapper";
 import { courseTable } from "~/schemas/courseTable";
-import { lectureTable } from "~/schemas/lectureTable";
 import { db } from "~/utils/db";
 import { eq, and } from "drizzle-orm";
+import { lectureTable } from "~/schemas/lectureTable";
 
 let lectureId:number;
 const lectureSchema = z.object({ 
@@ -23,6 +23,7 @@ const app = new Hono<Env>()
         async (c) => {
             const data = c.req.valid('json');
             lectureId = Number(data.inputLectureId);
+
             const res = await db
             .select({
                 courseTitle: courseTable.title,

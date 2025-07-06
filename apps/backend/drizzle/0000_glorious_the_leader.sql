@@ -8,12 +8,12 @@ CREATE TABLE `courseTable` (
 --> statement-breakpoint
 CREATE TABLE `lectureTable` (
 	`lectureId` int AUTO_INCREMENT NOT NULL,
-	`couseId` int NOT NULL,
+	`courseId` int NOT NULL,
 	`title` varchar(255),
 	`isCompleted` boolean NOT NULL DEFAULT false,
 	`videoUrl` varchar(255),
-	`memo` varchar(500),
+	`memo` text,
 	CONSTRAINT `lectureTable_lectureId` PRIMARY KEY(`lectureId`)
 );
 --> statement-breakpoint
-ALTER TABLE `lectureTable` ADD CONSTRAINT `lectureTable_couseId_courseTable_courseid_fk` FOREIGN KEY (`couseId`) REFERENCES `courseTable`(`courseid`) ON DELETE no action ON UPDATE no action;
+ALTER TABLE `lectureTable` ADD CONSTRAINT `lectureTable_courseId_courseTable_courseid_fk` FOREIGN KEY (`courseId`) REFERENCES `courseTable`(`courseid`) ON DELETE no action ON UPDATE no action;
