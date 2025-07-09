@@ -11,6 +11,7 @@ declare const app: import("hono/hono-base").HonoBase<Env, {
                 courseTitle: string;
                 lectureTitle: string;
                 lectureId: number;
+                courseID: number;
                 memo: string;
                 url: string;
                 isCompleted: boolean;

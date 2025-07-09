@@ -9,7 +9,6 @@ let courseTitle;
 let total;
 let completedCount;
 let courseID;
-let lectureID;
 const lectureSchema = z.object({
     courseId: z.string(),
     title: z.string(),
@@ -30,6 +29,12 @@ const app = new Hono()
     courseTitle = result[0]?.courseTitle ?? "";
     return c.json(courseTitle);
 })
+    .get('/allTitle', async (c) => {
+    const titleList = await db.select({ title: lectureTable.title })
+        .from(lectureTable);
+    let result = titleList.map(item => item.title ?? "");
+    return c.json(result);
+})
     //TODO: get data for calculate progress bar
     .post('/progRate', zValidator('json', z.object({
     corId: z.string()
@@ -43,7 +48,7 @@ const app = new Hono()
     //학습 완료한 lectrue의 수
     const value = await db.select({ completedCount: count() })
         .from(lectureTable)
-        .where(and(eq(lectureTable.isCompleted, true), ne(lectureTable.title, "")));
+        .where(and(eq(lectureTable.isCompleted, true), eq(lectureTable.courseId, courseID), ne(lectureTable.title, "")));
     total = max[0]?.total ?? 0;
     completedCount = value[0]?.completedCount ?? 0;
     let result = [total, completedCount];
@@ -86,5 +91,22 @@ const app = new Hono()
         .where(eq(lectureTable.title, data.title));
     let lectureTitle = titleList[0]?.id ?? -1;
     return c.json(lectureTitle);
+})
+    .post('/modifyTitle', zValidator('json', z.object({
+    title: z.string(),
+    modify: z.string()
+})), async (c) => {
+    const data = c.req.valid('json');
+    await db.update(lectureTable)
+        .set({ title: data.modify })
+        .where(eq(lectureTable.title, data.title));
+    return c.json({ message: 'successfully update!!' });
+})
+    .post('/deleteCourse', zValidator('json', z.object({
+    title: z.string(),
+})), async (c) => {
+    const data = c.req.valid('json');
+    const res1 = await db.delete(lectureTable).where(eq(lectureTable.title, data.title));
+    return c.json({ message: 'successfully delete!!' });
 });
 export default app;

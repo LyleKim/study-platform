@@ -44,6 +44,7 @@ const app = new Hono<Env>()
                 courseTitle: res[0]?.courseTitle ?? "",
                 lectureTitle: res[0]?.lectureTitle ?? "",
                 lectureId: res[0]?.lectureId??-1,
+                courseID: res[0]?.courseID??-1,
                 memo: res[0]?.memo ?? "",
                 url: res[0]?.url ?? "",
                 isCompleted: res[0]?.isCompleted??false

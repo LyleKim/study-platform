@@ -13,6 +13,15 @@ declare const app: import("hono/hono-base").HonoBase<Env, {
         };
     };
 } & {
+    "/allTitle": {
+        $get: {
+            input: {};
+            output: string[];
+            outputFormat: "json";
+            status: import("hono/utils/http-status").ContentfulStatusCode;
+        };
+    };
+} & {
     "/progRate": {
         $post: {
             input: {
@@ -64,6 +73,37 @@ declare const app: import("hono/hono-base").HonoBase<Env, {
                 };
             };
             output: number;
+            outputFormat: "json";
+            status: import("hono/utils/http-status").ContentfulStatusCode;
+        };
+    };
+} & {
+    "/modifyTitle": {
+        $post: {
+            input: {
+                json: {
+                    title: string;
+                    modify: string;
+                };
+            };
+            output: {
+                message: string;
+            };
+            outputFormat: "json";
+            status: import("hono/utils/http-status").ContentfulStatusCode;
+        };
+    };
+} & {
+    "/deleteCourse": {
+        $post: {
+            input: {
+                json: {
+                    title: string;
+                };
+            };
+            output: {
+                message: string;
+            };
             outputFormat: "json";
             status: import("hono/utils/http-status").ContentfulStatusCode;
         };

@@ -16,6 +16,17 @@ declare const client: {
     };
 } & {
     course: {
+        allTitle: import("hono/client").ClientRequest<{
+            $get: {
+                input: {};
+                output: string[];
+                outputFormat: "json";
+                status: import("hono/utils/http-status").ContentfulStatusCode;
+            };
+        }>;
+    };
+} & {
+    course: {
         progRate: import("hono/client").ClientRequest<{
             $post: {
                 input: {
@@ -79,6 +90,41 @@ declare const client: {
         }>;
     };
 } & {
+    course: {
+        modifyTitle: import("hono/client").ClientRequest<{
+            $post: {
+                input: {
+                    json: {
+                        title: string;
+                        modify: string;
+                    };
+                };
+                output: {
+                    message: string;
+                };
+                outputFormat: "json";
+                status: import("hono/utils/http-status").ContentfulStatusCode;
+            };
+        }>;
+    };
+} & {
+    course: {
+        deleteCourse: import("hono/client").ClientRequest<{
+            $post: {
+                input: {
+                    json: {
+                        title: string;
+                    };
+                };
+                output: {
+                    message: string;
+                };
+                outputFormat: "json";
+                status: import("hono/utils/http-status").ContentfulStatusCode;
+            };
+        }>;
+    };
+} & {
     lecture: {
         lectureInfo: import("hono/client").ClientRequest<{
             $post: {
@@ -91,6 +137,7 @@ declare const client: {
                     courseTitle: string;
                     lectureTitle: string;
                     lectureId: number;
+                    courseID: number;
                     memo: string;
                     url: string;
                     isCompleted: boolean;
@@ -137,6 +184,67 @@ declare const client: {
             status: import("hono/utils/http-status").ContentfulStatusCode;
         };
     }>;
+} & {
+    selectCourse: {
+        title: import("hono/client").ClientRequest<{
+            $get: {
+                input: {};
+                output: string[];
+                outputFormat: "json";
+                status: import("hono/utils/http-status").ContentfulStatusCode;
+            };
+        }>;
+    };
+} & {
+    selectCourse: {
+        getID: import("hono/client").ClientRequest<{
+            $post: {
+                input: {
+                    json: {
+                        title: string;
+                    };
+                };
+                output: number;
+                outputFormat: "json";
+                status: import("hono/utils/http-status").ContentfulStatusCode;
+            };
+        }>;
+    };
+} & {
+    selectCourse: {
+        modifyTitle: import("hono/client").ClientRequest<{
+            $post: {
+                input: {
+                    json: {
+                        title: string;
+                        modify: string;
+                    };
+                };
+                output: {
+                    message: string;
+                };
+                outputFormat: "json";
+                status: import("hono/utils/http-status").ContentfulStatusCode;
+            };
+        }>;
+    };
+} & {
+    selectCourse: {
+        deleteCourse: import("hono/client").ClientRequest<{
+            $post: {
+                input: {
+                    json: {
+                        title: string;
+                    };
+                };
+                output: {
+                    message: string;
+                };
+                outputFormat: "json";
+                status: import("hono/utils/http-status").ContentfulStatusCode;
+            };
+        }>;
+    };
 };
 export type Client = typeof client;
 export declare const hcWithType: (...args: Parameters<typeof hc>) => Client;

@@ -3,7 +3,8 @@ CREATE TABLE `courseTable` (
 	`title` varchar(30),
 	`goalDate` date,
 	`createdAt` date,
-	CONSTRAINT `courseTable_courseid` PRIMARY KEY(`courseid`)
+	CONSTRAINT `courseTable_courseid` PRIMARY KEY(`courseid`),
+	CONSTRAINT `courseTable_title_unique` UNIQUE(`title`)
 );
 --> statement-breakpoint
 CREATE TABLE `lectureTable` (
@@ -16,4 +17,4 @@ CREATE TABLE `lectureTable` (
 	CONSTRAINT `lectureTable_lectureId` PRIMARY KEY(`lectureId`)
 );
 --> statement-breakpoint
-ALTER TABLE `lectureTable` ADD CONSTRAINT `lectureTable_courseId_courseTable_courseid_fk` FOREIGN KEY (`courseId`) REFERENCES `courseTable`(`courseid`) ON DELETE no action ON UPDATE no action;
+ALTER TABLE `lectureTable` ADD CONSTRAINT `lectureTable_courseId_courseTable_courseid_fk` FOREIGN KEY (`courseId`) REFERENCES `courseTable`(`courseid`) ON DELETE cascade ON UPDATE no action;

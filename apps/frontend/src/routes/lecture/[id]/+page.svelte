@@ -15,6 +15,7 @@
 
   let fullUrl: string = $state("");
   let value:string = $state("");
+  let corId:number = $state(-1);
 
 type Lecture = {
     courseTitle: string;
@@ -23,6 +24,7 @@ type Lecture = {
     memo: string;
     url: string;
     isCompleted: boolean;
+    courseID: number;
 };
 let lectureStatus: Lecture = $state({  //초기 필요한 데이터 가져오기
     courseTitle: "",
@@ -30,7 +32,8 @@ let lectureStatus: Lecture = $state({  //초기 필요한 데이터 가져오기
     lectureId: 0,
     memo: "",
     url: "",
-    isCompleted: false
+    isCompleted: false,
+    courseID: -1
 });
 
 type LectureUpdate = {
@@ -56,15 +59,15 @@ let lectureUpdate:LectureUpdate;
     const res = await client.lecture.lectureInfo.$post({json:{ inputLectureId }});
     lectureStatus = await res.json();
     fullUrl = lectureStatus.url;
-    value = lectureStatus.memo
+    value = lectureStatus.memo;
+    corId = lectureStatus.courseID
+    console.log(corId);
 
     lectureUpdate = { //학습 완료, 저장 후 update용
         lectureId: lectureStatus.lectureId,
         memo: lectureStatus.memo,
         isCompleted: lectureStatus.isCompleted
     };
-
-    console.log(getYoutubeId(fullUrl)); //console.log
   };
 
 
@@ -93,11 +96,11 @@ async function updateChanges(Memo:string, status:boolean){
     lectureUpdate.memo = Memo;
     lectureUpdate.isCompleted = status;
     await client.lecture.lectureMemo.$post({json : { lectureUpdate }});
-    goto('/');
+    goto(`/course/${corId}/`);
 }
 
 async function whereToGo() {
-    goto('/');
+    goto(`/course/${corId}/`);
 }
 
 </script>

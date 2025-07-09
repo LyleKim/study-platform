@@ -12,7 +12,6 @@ let courseTitle:string;
 let total:number;
 let completedCount:number;
 let courseID:number;
-let lectureID:number;
 
 const lectureSchema = z.object({ 
     courseId: z.string(),
@@ -41,6 +40,16 @@ const app = new Hono<Env>()
 
             courseTitle = result[0]?.courseTitle??""
             return c.json(courseTitle);
+        }
+    )
+    .get( 
+        '/allTitle',
+        async (c) => {
+            const titleList = await db.select({title : lectureTable.title})
+            .from(lectureTable)
+
+            let result:string[] = titleList.map(item => item.title??"");
+            return c.json(result);
         }
     )
 
@@ -133,6 +142,36 @@ const app = new Hono<Env>()
             let lectureTitle = titleList[0]?.id??-1;
 
             return c.json(lectureTitle);
+        }
+    )
+    .post( 
+        '/modifyTitle',
+        zValidator('json', 
+            z.object({ 
+              title: z.string(),
+              modify: z.string()
+            })
+        ),
+        async (c) => {
+            const data = c.req.valid('json');
+            await db.update(lectureTable)
+                    .set({title: data.modify})
+                    .where(eq(lectureTable.title, data.title))
+            
+            return c.json({message: 'successfully update!!'});
+        }
+    )
+    .post( 
+        '/deleteCourse',
+        zValidator('json', 
+            z.object({ 
+              title: z.string(),
+            })
+        ),
+        async (c) => {
+            const data = c.req.valid('json');
+            const res1 = await db.delete(lectureTable).where(eq(lectureTable.title,data.title));
+            return c.json({ message: 'successfully delete!!' });
         }
     )
 

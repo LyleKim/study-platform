@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "82933ec7-d5fd-466b-928f-ce00a482485a",
+  "id": "2ae858a4-573a-4771-8cdc-739ba41b8ce9",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "courseTable": {
@@ -46,7 +46,14 @@
           ]
         }
       },
-      "uniqueConstraints": {},
+      "uniqueConstraints": {
+        "courseTable_title_unique": {
+          "name": "courseTable_title_unique",
+          "columns": [
+            "title"
+          ]
+        }
+      },
       "checkConstraint": {}
     },
     "lectureTable": {
@@ -108,7 +115,7 @@
           "columnsTo": [
             "courseid"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
