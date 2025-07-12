@@ -15,13 +15,11 @@ const lectureSchema = z.object({
     videoUrl: z.string(),
 });
 const app = new Hono()
-    //TODO: get course title
     .post('/title', zValidator('json', z.object({
     corId: z.string()
 })), async (c) => {
     const data = c.req.valid('json');
     courseID = Number(data.corId);
-    //courseTable에서 title 가져오기
     const result = await db.select({
         courseTitle: courseTable.title
     }).from(courseTable)
@@ -35,7 +33,6 @@ const app = new Hono()
     let result = titleList.map(item => item.title ?? "");
     return c.json(result);
 })
-    //TODO: get data for calculate progress bar
     .post('/progRate', zValidator('json', z.object({
     corId: z.string()
 })), async (c) => {
@@ -55,7 +52,8 @@ const app = new Hono()
     return c.json(result);
 })
     //TOTO: get a lecture titleList that is a part of course
-    .post('/tdl', zValidator('json', z.object({
+    .post(//lectureTable
+'/tdl', zValidator('json', z.object({
     corId: z.string()
 })), async (c) => {
     const data = c.req.valid('json');
@@ -68,7 +66,8 @@ const app = new Hono()
     return c.json(result);
 })
     //TODO: get a lecture data and insert column
-    .post('/Addlecture', zValidator('json', z.object({
+    .post(//lectureTable
+'/Addlecture', zValidator('json', z.object({
     lecture: lectureSchema
 })), async (c) => {
     const data = c.req.valid('json');
@@ -82,7 +81,8 @@ const app = new Hono()
     });
     return c.json("성공적으로 저장했습니다.");
 })
-    .post('/getLectureId', zValidator('json', z.object({
+    .post(//lectureTable
+'/getLectureId', zValidator('json', z.object({
     title: z.string()
 })), async (c) => {
     const data = c.req.valid('json');
@@ -92,7 +92,8 @@ const app = new Hono()
     let lectureTitle = titleList[0]?.id ?? -1;
     return c.json(lectureTitle);
 })
-    .post('/modifyTitle', zValidator('json', z.object({
+    .post(//lectureTable
+'/modifyTitle', zValidator('json', z.object({
     title: z.string(),
     modify: z.string()
 })), async (c) => {
@@ -102,7 +103,8 @@ const app = new Hono()
         .where(eq(lectureTable.title, data.title));
     return c.json({ message: 'successfully update!!' });
 })
-    .post('/deleteCourse', zValidator('json', z.object({
+    .post(//lectureTable
+'/deleteCourse', zValidator('json', z.object({
     title: z.string(),
 })), async (c) => {
     const data = c.req.valid('json');

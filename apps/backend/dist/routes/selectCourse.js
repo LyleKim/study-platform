@@ -4,8 +4,6 @@ import { zValidator } from "~/utils/zValidator-wrapper";
 import { db } from "~/utils/db";
 import { courseTable } from "~/schemas/courseTable";
 import { eq } from "drizzle-orm";
-import { ca } from "zod/v4/locales";
-let courseTitle;
 //본 페이지는 화면에서 모든 course를 조회, 수정할 때 사용됩니다.
 const app = new Hono()
     //TODO: get course title

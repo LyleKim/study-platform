@@ -21,7 +21,6 @@ const lectureSchema = z.object({
 
 
 const app = new Hono<Env>()
-    //TODO: get course title
     .post( 
         '/title',
         zValidator('json', 
@@ -32,7 +31,6 @@ const app = new Hono<Env>()
         async (c) => {
             const data = c.req.valid('json');
             courseID = Number(data.corId);
-            //courseTable에서 title 가져오기
             const result = await db.select({
                 courseTitle: courseTable.title
             }).from(courseTable)
@@ -42,7 +40,7 @@ const app = new Hono<Env>()
             return c.json(courseTitle);
         }
     )
-    .get( 
+    .get(
         '/allTitle',
         async (c) => {
             const titleList = await db.select({title : lectureTable.title})
@@ -53,7 +51,6 @@ const app = new Hono<Env>()
         }
     )
 
-    //TODO: get data for calculate progress bar
     .post(
         '/progRate',
         zValidator('json', 
@@ -84,7 +81,7 @@ const app = new Hono<Env>()
     )
 
     //TOTO: get a lecture titleList that is a part of course
-    .post(
+    .post( //lectureTable
         '/tdl',
         zValidator('json', 
             z.object({ 
@@ -105,7 +102,7 @@ const app = new Hono<Env>()
         }
     )
     //TODO: get a lecture data and insert column
-    .post(
+    .post( //lectureTable
         '/Addlecture',
         zValidator('json', 
             z.object({ 
@@ -126,7 +123,7 @@ const app = new Hono<Env>()
             return c.json("성공적으로 저장했습니다.");
         }
     )
-    .post(
+    .post( //lectureTable
         '/getLectureId',
         zValidator('json', 
             z.object({ 
@@ -144,7 +141,7 @@ const app = new Hono<Env>()
             return c.json(lectureTitle);
         }
     )
-    .post( 
+    .post( //lectureTable
         '/modifyTitle',
         zValidator('json', 
             z.object({ 
@@ -161,7 +158,7 @@ const app = new Hono<Env>()
             return c.json({message: 'successfully update!!'});
         }
     )
-    .post( 
+    .post( //lectureTable
         '/deleteCourse',
         zValidator('json', 
             z.object({ 
