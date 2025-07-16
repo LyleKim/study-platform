@@ -10,10 +10,6 @@
       goto('/courseList')
   }
 
-  function gotoOffline(){
-    goto('/lecture')
-  }
-
 </script>
 
 <main>
@@ -27,13 +23,8 @@
         </div>
 
         <div class="button-group">
-          {#if navigator.onLine}
-            <button class="buttonStyle" onclick="{newCourseClick}">과목 생성하기</button>
-            <button class="buttonStyle" onclick="{() => gotoOffline()}">오프라인 모드</button>
-            <button class="buttonStyle" onclick="{courseClick}">기존 과목 보기</button>
-          {:else}
-            <button class="buttonStyle" onclick="{() => gotoOffline()}">오프라인 모드</button>
-          {/if}
+            <button class="buttonStyle" onclick="{newCourseClick}">새로운 학습 시작</button>
+            <button class="buttonStyle" onclick="{courseClick}">기존 학습 보기</button>
         </div>
       </section>
       

@@ -32,10 +32,10 @@
 <main>
 <div transition:fly="{{ y: 60, duration: 800 }}">
   <div class="form-container">
-    <h1 class="form-title">새로운 과목 생성하기</h1>
+    <h1 class="form-title">새로운 학습 생성하기</h1>
 
     <label class="form-label">
-      과목 이름:
+      학습 이름:
       <input
         class="form-input"
         type="text"
@@ -52,7 +52,7 @@
         <div>
         <button
             class="form-button-left"
-            onclick={courseAddClick}>과목 추가</button
+            onclick={courseAddClick}>학습 추가</button
         >
         </div>
 

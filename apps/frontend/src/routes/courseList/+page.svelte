@@ -90,10 +90,10 @@
           >메인으로</button
         >
         <button class="nav-button" onclick={() => whereToGo("create")}
-          >새로운 과목 주가</button
+          >새로운 작업 추가</button
         >
         <button class="nav-button" onclick={() => modifystatus()}
-          >과목 목록 수정</button
+          >작업 목록 수정</button
         >
       </nav>
     </header>
