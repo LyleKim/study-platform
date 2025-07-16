@@ -47,7 +47,7 @@ What is it for?
 
 <br><br>
 
-***Run to dev***
+**Run to dev**
 
 ```
 bun run dev # run backend and frontend dev server
